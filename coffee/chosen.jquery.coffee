@@ -7,9 +7,17 @@ $ = jQuery
 
 $.fn.extend({
   chosen: (options) ->
+    ua = navigator.userAgent.toLowerCase();
+
+    match = /(msie) ([\w.]+)/.exec( ua ) || [];
+    
+    browser =
+      name: match[ 1 ] || ""
+      version: match[ 2 ] || "0"
+      
     # Do no harm and return as soon as possible for unsupported browsers, namely IE6 and IE7
     # Continue on if running IE document type but in compatibility mode
-    return this if $.browser.msie and ($.browser.version is "6.0" or  ($.browser.version is "7.0" and document.documentMode is 7 ))
+    return this if browser.name is "msie" and (browser.version is "6.0" or  (browser.version is "7.0" and document.documentMode is 7 ))
     this.each((input_field) ->
       $this = $ this
       $this.data('chosen', new Chosen(this, options)) unless $this.hasClass "chzn-done"
@@ -79,28 +87,28 @@ class Chosen extends AbstractChosen
     @form_field_jq.trigger("liszt:ready", {chosen: this})
 
   register_observers: ->
-    @container.mousedown (evt) => this.container_mousedown(evt)
-    @container.mouseup (evt) => this.container_mouseup(evt)
-    @container.mouseenter (evt) => this.mouse_enter(evt)
-    @container.mouseleave (evt) => this.mouse_leave(evt)
+    @container.mousedown (evt) => this.container_mousedown(evt); return
+    @container.mouseup (evt) => this.container_mouseup(evt); return
+    @container.mouseenter (evt) => this.mouse_enter(evt); return
+    @container.mouseleave (evt) => this.mouse_leave(evt); return
 
-    @search_results.mouseup (evt) => this.search_results_mouseup(evt)
-    @search_results.mouseover (evt) => this.search_results_mouseover(evt)
-    @search_results.mouseout (evt) => this.search_results_mouseout(evt)
+    @search_results.mouseup (evt) => this.search_results_mouseup(evt); return
+    @search_results.mouseover (evt) => this.search_results_mouseover(evt); return
+    @search_results.mouseout (evt) => this.search_results_mouseout(evt); return
 
-    @form_field_jq.bind "liszt:updated", (evt) => this.results_update_field(evt)
-    @form_field_jq.bind "liszt:activate", (evt) => this.activate_field(evt)
-    @form_field_jq.bind "liszt:open", (evt) => this.container_mousedown(evt)
+    @form_field_jq.bind "liszt:updated", (evt) => this.results_update_field(evt); return
+    @form_field_jq.bind "liszt:activate", (evt) => this.activate_field(evt); return
+    @form_field_jq.bind "liszt:open", (evt) => this.container_mousedown(evt); return
 
-    @search_field.blur (evt) => this.input_blur(evt)
-    @search_field.keyup (evt) => this.keyup_checker(evt)
-    @search_field.keydown (evt) => this.keydown_checker(evt)
-    @search_field.focus (evt) => this.input_focus(evt)
+    @search_field.blur (evt) => this.input_blur(evt); return
+    @search_field.keyup (evt) => this.keyup_checker(evt); return
+    @search_field.keydown (evt) => this.keydown_checker(evt); return
+    @search_field.focus (evt) => this.input_focus(evt); return
 
     if @is_multiple
-      @search_choices.click (evt) => this.choices_click(evt)
+      @search_choices.click (evt) => this.choices_click(evt); return
     else
-      @container.click (evt) => evt.preventDefault() # gobble click of anchor
+      @container.click (evt) => evt.preventDefault(); return # gobble click of anchor
 
   search_field_disabled: ->
     @is_disabled = @form_field_jq[0].disabled
