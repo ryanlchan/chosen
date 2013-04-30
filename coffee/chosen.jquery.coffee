@@ -8,7 +8,6 @@ $ = jQuery
 $.fn.extend({
   chosen: (options) ->
     ua = navigator.userAgent.toLowerCase();
-
     match = /(msie) ([\w.]+)/.exec( ua ) || [];
     
     browser =
@@ -350,7 +349,7 @@ class Chosen extends AbstractChosen
       if high.hasClass 'create-option'
         this.select_create_option(@search_field.val())
         return this.results_hide()
-      
+
       high_id = high.attr "id"
 
       this.result_clear_highlight()
@@ -424,9 +423,9 @@ class Chosen extends AbstractChosen
     regex = new RegExp(regexAnchor + searchText.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"), 'i')
     zregex = new RegExp(searchText.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"), 'i')
     eregex = new RegExp('^' + searchText.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&") + '$', 'i')
-    
+
     exact_result = false
-    
+
     for option in @results_data
       if not option.disabled and not option.empty
         if option.group
@@ -442,7 +441,7 @@ class Chosen extends AbstractChosen
 
             if eregex.test option.html
               exact_result = true
-            
+
           else if @enable_split_word_search and (option.html.indexOf(" ") >= 0 or option.html.indexOf("[") == 0)
 
             #TODO: replace this substitution of /\[\]/ with a list of characters to skip.
@@ -497,32 +496,30 @@ class Chosen extends AbstractChosen
   no_results: (terms) ->
     no_results_html = $('<li class="no-results">' + @results_none_found + ' "<span></span>"</li>')
     no_results_html.find("span").first().html(terms)
-    
+
     @search_results.append no_results_html
- 
     if @create_option
-      this.show_create_option( terms )
+      this.show_create_option terms
 
   show_create_option: (terms) ->
     create_option_html = $('<li class="create-option active-result"><a href="javascript:void(0);">' + @create_option_text + '</a>: "' + terms + '"</li>')
     @search_results.append create_option_html
-    
+
   create_option_clear: ->
     @search_results.find(".create-option").remove()
-    
+
   select_create_option: (terms) ->
     if $.isFunction(@create_option)
       @create_option.call this, terms
     else
       this.select_append_option {value: terms, text: terms}
 
-  select_append_option: ( options ) ->
-    option = $('<option />', options ).attr('selected', 'selected')
+  select_append_option: (options) ->
+    attributes = $.extend({}, options, selected: 1)
+    option = $('<option />', attributes)
     @form_field_jq.append option
     @form_field_jq.trigger "liszt:updated"
-    #@active_field = false
-    @search_field.trigger('focus')
-  
+
   no_results_clear: ->
     @search_results.find(".no-results").remove()
 
