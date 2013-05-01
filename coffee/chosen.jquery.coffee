@@ -9,11 +9,11 @@ $.fn.extend({
   chosen: (options) ->
     ua = navigator.userAgent.toLowerCase();
     match = /(msie) ([\w.]+)/.exec( ua ) || [];
-    
+
     browser =
       name: match[ 1 ] || ""
       version: match[ 2 ] || "0"
-      
+
     # Do no harm and return as soon as possible for unsupported browsers, namely IE6 and IE7
     # Continue on if running IE document type but in compatibility mode
     return this if browser.name is "msie" and (browser.version is "6.0" or  (browser.version is "7.0" and document.documentMode is 7 ))
@@ -44,7 +44,7 @@ class Chosen extends AbstractChosen
 
     @f_width = @form_field_jq.outerWidth()
 
-    container_props = 
+    container_props =
       id: @container_id
       class: container_classes.join ' '
       style: 'width: ' + (@f_width) + 'px;' #use parens around @f_width so coffeescript doesn't think + ' px' is a function parameter
@@ -183,7 +183,7 @@ class Chosen extends AbstractChosen
       @selected_item.addClass("chzn-default").find("span").text(@default_text)
       if @create_option and not @disable_search
         @container.removeClass "chzn-container-single-nosearch"
-      else if @disable_search or @form_field.options.length <= @disable_search_threshold 
+      else if @disable_search or @form_field.options.length <= @disable_search_threshold
         @container.addClass "chzn-container-single-nosearch"
 
     content = ''
@@ -503,6 +503,7 @@ class Chosen extends AbstractChosen
 
   show_create_option: (terms) ->
     create_option_html = $('<li class="create-option active-result"><a href="javascript:void(0);">' + @create_option_text + '</a>: "' + terms + '"</li>')
+    @create_option_clear()
     @search_results.append create_option_html
 
   create_option_clear: ->

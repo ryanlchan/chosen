@@ -989,6 +989,7 @@ Copyright (c) 2011 by Harvest
       var create_option_html;
 
       create_option_html = $('<li class="create-option active-result"><a href="javascript:void(0);">' + this.create_option_text + '</a>: "' + terms + '"</li>');
+      this.create_option_clear();
       return this.search_results.append(create_option_html);
     };
 
